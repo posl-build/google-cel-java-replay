@@ -1,22 +1,14 @@
 name: CEL-Java CI
 run-name: Workflow started by ${{ github.actor }}.
 on:
-  push:
-    branches:
-      - 'main'
-  pull_request:
-    branches:
-      - 'main'
-
-# Cancel previous workflows on the PR when there are multiple fast commits.
-# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#concurrency
+  workflow_dispatch:
 concurrency:
     group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
     cancel-in-progress: true
 
 jobs:
   Bazel-Build-Java8:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     timeout-minutes: 30
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
@@ -46,7 +38,7 @@ jobs:
       - run: echo "🍏 This job's status is ${{ job.status }}."
 
   Bazel-Tests:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     timeout-minutes: 30
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
@@ -75,7 +67,7 @@ jobs:
 
   # -- Start of Maven Conformance Tests (Ran only when there's version changes) --
   Maven-Conformance:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     timeout-minutes: 30
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
